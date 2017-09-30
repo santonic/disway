@@ -8,4 +8,6 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 public interface GreetingServiceAsync {
   void greetServer(String input, AsyncCallback<String> callback)
       throws IllegalArgumentException;
+
+  void join(com.google.gwt.user.client.rpc.AsyncCallback<java.lang.String> arg1);
 }

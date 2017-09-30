@@ -1,5 +1,20 @@
 /** Add css rules here for your application. */
 
+#body {
+  background: black;	
+  text-align: center;
+}
+
+#main{
+  background: white;
+  
+  /* to center : */
+  position: absolute;
+  width: 500px;
+  z-index: 15;
+  left: 50%;
+  margin-left: -250px; 
+}
 
 /** Example rules used by the template application (remove for your app) */
 h1 {
@@ -10,7 +25,7 @@ h1 {
   text-align: center;
 }
 
-.sendButton {
+.joinButton {
   display: block;
   font-size: 16pt;
 }
