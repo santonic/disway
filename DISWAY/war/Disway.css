@@ -26,9 +26,16 @@ h1 {
 }
 
 .joinButton {
-  display: block;
+  /* display: block; */
   font-size: 16pt;
+  /* align: center;*/
 }
+
+#joinButtonContainer {
+	text-align: center;
+}
+
+
 
 /** Most GWT widgets already have a style name defined */
 .gwt-DialogBox {

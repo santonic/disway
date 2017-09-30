@@ -39,17 +39,20 @@ public class Disway implements EntryPoint {
    */
   public void onModuleLoad() {
     final Button sendButton = new Button("Send");
+    final Button joinButton = new Button("Join !");
     final TextBox nameField = new TextBox();
     nameField.setText("GWT User");
     final Label errorLabel = new Label();
 
     // We can add style names to widgets
     sendButton.addStyleName("sendButton");
+    joinButton.addStyleName("joinButton");
 
     // Add the nameField and sendButton to the RootPanel
     // Use RootPanel.get() to get the entire body element
-    RootPanel.get("nameFieldContainer").add(nameField);
-    RootPanel.get("sendButtonContainer").add(sendButton);
+//    RootPanel.get("nameFieldContainer").add(nameField);
+//    RootPanel.get("sendButtonContainer").add(sendButton);
+    RootPanel.get("joinButtonContainer").add(joinButton);
     RootPanel.get("errorLabelContainer").add(errorLabel);
 
     // Focus the cursor on the name field when the app loads
@@ -84,6 +87,36 @@ public class Disway implements EntryPoint {
       }
     });
 
+    class JoinButtonHandler implements ClickHandler {
+        /**
+         * Fired when the user clicks on the sendButton.
+         */
+        public void onClick(ClickEvent event) {
+        	System.out.println("calling join");
+        	
+          greetingService.join(new AsyncCallback<String>() {
+              public void onFailure(Throwable caught) {
+            	  System.out.println("failed calling join");
+                  // Show the RPC error message to the user
+                  dialogBox.setText("Remote Procedure Call - Failure");
+                  serverResponseLabel.addStyleName("serverResponseLabelError");
+                  serverResponseLabel.setHTML(SERVER_ERROR);
+                  dialogBox.center();
+                  closeButton.setFocus(true);
+                }
+
+                public void onSuccess(String result) {
+                	System.out.println("successfully calling join");
+                  dialogBox.setText("Remote Procedure Call");
+                  serverResponseLabel.removeStyleName("serverResponseLabelError");
+                  serverResponseLabel.setHTML(result);
+                  dialogBox.center();
+                  closeButton.setFocus(true);
+                }
+              });
+        }
+    }
+    
     // Create a handler for the sendButton and nameField
     class MyHandler implements ClickHandler, KeyUpHandler {
       /**
@@ -141,7 +174,10 @@ public class Disway implements EntryPoint {
 
     // Add a handler to send the name to the server
     MyHandler handler = new MyHandler();
+    JoinButtonHandler joinButtonHandler = new JoinButtonHandler();
     sendButton.addClickHandler(handler);
+    joinButton.addClickHandler(joinButtonHandler);
+    System.out.println("CSA added handler on join");
     nameField.addKeyUpHandler(handler);
   }
 }

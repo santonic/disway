@@ -10,9 +10,12 @@ import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 @SuppressWarnings("serial")
 public class GreetingServiceImpl extends RemoteServiceServlet implements
     GreetingService {
+	
+	
 
 	public String join() throws IllegalArgumentException {
 		return "Joined successfully!";
+		// TODO build map of users coordinates
 	}
 	
   public String greetServer(String input) throws IllegalArgumentException {
