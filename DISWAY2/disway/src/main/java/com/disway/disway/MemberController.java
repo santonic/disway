@@ -24,6 +24,11 @@ public class MemberController {
 		list.add(new Member(nextId.getAndIncrement(), 265425.3 + 40, 6248108 - 80, "j'ai froid"));
 	}
 
+	@RequestMapping("/")
+    String index() {
+        return "test";
+    }
+	
 	@RequestMapping("/members")
 	public Collection<Member> listMembers() {
 		return list;

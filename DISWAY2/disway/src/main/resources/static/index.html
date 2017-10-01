@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+    <head>
+      <title>Geolocation</title>
+      <link rel="stylesheet" href="https://openlayers.org/en/v4.3.4/css/ol.css" type="text/css">
+      <!-- The line below is only needed for old environments like Internet Explorer and Android 4.x -->
+      <script src="https://cdn.polyfill.io/v2/polyfill.min.js?features=requestAnimationFrame,Element.prototype.classList,URL"></script>
+      <script src="https://openlayers.org/en/v4.3.4/build/ol.js"></script>
+      <style>
+        body {
+          padding: 0;
+          margin: 0;
+          }
+        html, body, #map {
+          height: 100%;
+          width: 100vw;
+          }
+      </style>
+    </head>
+    <body>
+      <div id="map" class="map"></div>
+      <div id="info" style="display: none;"></div>
+      <label for="track">
+        track enabled ?
+        <input id="track" type="checkbox"/>
+      </label>
+
+      <script>
+      //Affichage map
+        function httpGet(theUrl) {
+          var xmlHttp = new XMLHttpRequest();
+          xmlHttp.open("GET", theUrl, false); // false for synchronous request
+          xmlHttp.send(null);
+          return xmlHttp.responseText;
+        }
+        var getMembersUrl = "http://128.93.88.90/members";
+        var json = httpGet(getMembersUrl);
+        //var members = JSON.parse('[{"id":1,"x":265325,"y":6248002,"content":"j\'ai faim"},{"id":1,"x":265470.3,"y":6248168.0,"content":"j\'ai froid"},{"id":1,"x":265365.3,"y":6248198.0,"content":"j\'ai mal aux dents"},{"id":1,"x":265465.3,"y":6248028.0,"content":"j\'ai froid"}]');
+        var members = JSON.parse(json);
+      
+        var view = new ol.View({
+          center: [265425, 6248108],
+          zoom: 18
+        });
+
+        var map = new ol.Map({
+          layers: [
+            new ol.layer.Tile({
+              source: new ol.source.OSM()
+            })
+          ],
+          target: 'map',
+          controls: ol.control.defaults({
+            attributionOptions: /** @type {olx.control.AttributionOptions} */ ({
+              collapsible: false
+            })
+          }),
+          view: view
+        });
+
+        var geolocation = new ol.Geolocation({
+          projection: view.getProjection(),
+          tracking: true
+        });
+
+        geolocation.on('change', function(evt) {
+          console.log(geolocation.getPosition());
+          map.getView().setCenter(geolocation.getPosition());
+        });
+        function el(id) {
+          return document.getElementById(id);
+        }
+
+        // handle geolocation error.
+        geolocation.on('error', function(error) {
+          var info = document.getElementById('info');
+          info.innerHTML = error.message;
+          info.style.display = '';
+        });
+
+        var accuracyFeature = new ol.Feature();
+        geolocation.on('change:accuracyGeometry', function() {
+          accuracyFeature.setGeometry(geolocation.getAccuracyGeometry());
+        });
+
+        var positionFeature = new ol.Feature();
+        positionFeature.setStyle(new ol.style.Style({
+          image: new ol.style.Circle({
+            radius: 6,
+            fill: new ol.style.Fill({
+              color: '#3399CC'
+            }),
+            stroke: new ol.style.Stroke({
+              color: '#fff',
+              width: 2
+            })
+          })
+        }));
+
+        // Le point rouge, déclaration et style
+        var styl = new ol.style.Style({
+//          image: new ol.style.Circle({
+  //          radius: 6,
+            fill: new ol.style.Fill({
+              color: '#CC6633'
+            }),
+            stroke: new ol.style.Stroke({
+              color: '#fff',
+              width: 2
+          //  })
+          })
+        });
+
+        geolocation.on('change:position', function() {
+          var coordinates = geolocation.getPosition();
+          positionFeature.setGeometry(coordinates ?
+            new ol.geom.Point(coordinates) : null);
+        });
+
+        var vectorSource =new ol.source.Vector();
+        
+        var features = [];
+        for(var i=0; i < members.length; i++) {
+
+          var feature = (new ol.Feature({
+            geometry: new ol.geom.Circle([Number(members[i].x),Number(members[i].y)],4)
+          }));
+          feature.setStyle(styl);
+          features.push(feature);
+
+        }
+
+        vectorSource.addFeatures(features);
+        if (accuracyFeature != null && positionFeature != null) {
+          vectorSource.addFeatures([accuracyFeature, positionFeature]);
+        }
+
+        new ol.layer.Vector({
+          map: map,
+          source: vectorSource
+        });
+
+      </script>
+    </body>
+  </html>
