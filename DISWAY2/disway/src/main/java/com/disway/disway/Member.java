@@ -6,6 +6,7 @@ public class Member {
 	private final double x;
 	private final double y;
 	private String problem;
+	private boolean me;
 
 	public Member(long id, double x, double y, String problem) {
 		super();
@@ -33,4 +34,13 @@ public class Member {
 	public void setProblem(String problem) {
 		this.problem= problem;
 	}
+
+	public boolean isMe() {
+		return me;
+	}
+
+	public void setMe(boolean me) {
+		this.me = me;
+	}
+	
 }

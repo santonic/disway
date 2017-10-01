@@ -33,7 +33,8 @@
           var xmlHttp = new XMLHttpRequest();
           xmlHttp.open("GET", "http://128.93.88.90/members/_join", false); // false for synchronous request
           xmlHttp.send(null);
-          location.reload(); 
+          window.location.replace("http://128.93.88.90/index.html?hasJoined=true");
+          /* location.reload();*/ 
       }
       
       
@@ -94,26 +95,48 @@
           accuracyFeature.setGeometry(geolocation.getAccuracyGeometry());
         });
 
+        var iconStyle_red = new ol.style.Style({
+          image: new ol.style.Icon(/** @type {olx.style.IconOptions} */ ({
+            anchor: [0.5, 1],
+            anchorXUnits: 'fraction',
+            anchorYUnits: 'fraction',
+            src: 'http://iconshow.me/media/images/Mixed/small-n-flat-icon/png2/128/-map-marker.png',
+            scale: 0.3
+          }))
+        });
+
+        var iconStyle_blue = new ol.style.Style({
+          image: new ol.style.Icon(/** @type {olx.style.IconOptions} */ ({
+            anchor: [0.5, 1],
+            anchorXUnits: 'fraction',
+            anchorYUnits: 'fraction',
+            src: 'image/map-marker_2.png',
+            scale: 0.3
+          }))
+        });
+
         var positionFeature = new ol.Feature();
-        positionFeature.setStyle(new ol.style.Style({
-          image: new ol.style.Circle({
-            radius: 6,
+        positionFeature.setStyle(iconStyle_blue);
+
+        // Le point rouge, déclaration et style
+        var styl_blue = new ol.style.Style({
+//          image: new ol.style.Circle({
+  //          radius: 6,
             fill: new ol.style.Fill({
-              color: '#3399CC'
+              color: '#1f9ab9'
             }),
             stroke: new ol.style.Stroke({
               color: '#fff',
               width: 2
-            })
+          //  })
           })
-        }));
+        });
 
-        // Le point rouge, déclaration et style
-        var styl = new ol.style.Style({
+        var styl_red = new ol.style.Style({
 //          image: new ol.style.Circle({
   //          radius: 6,
             fill: new ol.style.Fill({
-              color: '#CC6633'
+              color: '#e74c3c'
             }),
             stroke: new ol.style.Stroke({
               color: '#fff',
@@ -136,7 +159,12 @@
           var feature = (new ol.Feature({
             geometry: new ol.geom.Circle([Number(members[i].x),Number(members[i].y)],4)
           }));
-          feature.setStyle(styl);
+          if (members[i].problem != "") {
+            feature.setStyle(styl_red);
+          }
+          else {
+            feature.setStyle(styl_blue);
+          }
           features.push(feature);
 
         }
