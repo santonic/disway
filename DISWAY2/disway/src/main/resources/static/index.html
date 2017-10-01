@@ -1,7 +1,9 @@
 <!DOCTYPE html>
 <html>
     <head>
-      <title>Geolocation</title>
+      <title>Disway</title>
+      <link rel="stylesheet" href="./style.css" type="text/css">
+      
       <link rel="stylesheet" href="https://openlayers.org/en/v4.3.4/css/ol.css" type="text/css">
       <!-- The line below is only needed for old environments like Internet Explorer and Android 4.x -->
       <script src="https://cdn.polyfill.io/v2/polyfill.min.js?features=requestAnimationFrame,Element.prototype.classList,URL"></script>
@@ -26,6 +28,15 @@
       </label>
 
       <script>
+      
+      function join() {
+          var xmlHttp = new XMLHttpRequest();
+          xmlHttp.open("GET", "http://128.93.88.90/members/_join", false); // false for synchronous request
+          xmlHttp.send(null);
+          location.reload(); 
+      }
+      
+      
       //Affichage map
         function httpGet(theUrl) {
           var xmlHttp = new XMLHttpRequest();
@@ -141,5 +152,8 @@
         });
 
       </script>
+      <section class="gradient" style="text-align:center;">
+	      <button id="joinButton"  onclick="javascript:join()">Join !</button>
+      </section>
     </body>
   </html>

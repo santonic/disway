@@ -1,0 +1,44 @@
+/*
+#body {
+  background: black;	
+  text-align: center;
+}
+
+#main{
+  background: white;
+  position: absolute;
+  width: 500px;
+  z-index: 15;
+  left: 50%;
+  margin-left: -250px; 
+}
+*/
+
+
+section.gradient button {
+  font-size: 200%;
+  color: #fff;
+  /*text-shadow: -2px 2px #346392;*/
+  background-color: red; /* #ff9664; */
+  background-image: linear-gradient(top, #6496c8, #346392);
+  box-shadow: inset 0 0 0 1px #27496d;
+  border: none;
+  border-radius: 15px;
+}
+
+section.gradient button:hover,
+section.gradient button.hover {
+  box-shadow: inset 0 0 0 1px #27496d,0 5px 15px #193047;
+}
+
+section.gradient button:active,
+section.gradient button.active {
+  box-shadow: inset 0 0 0 1px #27496d,inset 0 5px 30px #193047;
+}
+
+button {
+    position: absolute;
+    /* left: 0px;*/
+    bottom: 30px;
+    z-index: 10;
+}
